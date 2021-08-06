@@ -8,20 +8,23 @@
 
 ## Table of Contents
 
-* [Overview](#overview)
-* [Policy, rules and guidelines](#policy-rules-and-guidelines)
-* [Configuring library auto-update](#configuring-library-auto-update)
-  * [Auto-update overview](#auto-update-overview)
-  * [Auto-update config](#auto-update-config)
-* [Configuring file optimization](#configuring-file-optimization)
-* [Creating a new library on cdnjs](#creating-a-new-library-on-cdnjs)
-  * [Fork the cdnjs repository](#fork-the-cdnjs-repository)
-  * [Make changes to your fork](#make-changes-to-your-fork)
-  * [Follow the existing library conventions](#follow-the-existing-library-conventions)
-  * [Making changes using your browser](#making-changes-using-your-browser)
-  * [Create a pull request](#create-a-pull-request)
-  * [Fixing any CI errors](#fixing-any-ci-errors)
-  * [Reviewing and merging](#reviewing-and-merging)
+- [Table of Contents](#table-of-contents)
+- [Overview](#overview)
+- [Policy, rules and guidelines](#policy-rules-and-guidelines)
+- [Creating a new library on cdnjs](#creating-a-new-library-on-cdnjs)
+  - [Fork the cdnjs repository](#fork-the-cdnjs-repository)
+  - [Make changes to your fork](#make-changes-to-your-fork)
+  - [Follow the existing library conventions](#follow-the-existing-library-conventions)
+  - [Making changes using your browser](#making-changes-using-your-browser)
+  - [Create a pull request](#create-a-pull-request)
+  - [Fixing any CI errors](#fixing-any-ci-errors)
+  - [Reviewing and merging](#reviewing-and-merging)
+- [Configuring library auto-update](#configuring-library-auto-update)
+  - [Auto-update overview](#auto-update-overview)
+  - [Auto-update config](#auto-update-config)
+    - [NPM-based auto-update example](#npm-based-auto-update-example)
+    - [Git-based auto-update example](#git-based-auto-update-example)
+- [Configuring file optimization](#configuring-file-optimization)
 
 ## Overview
 
@@ -44,6 +47,102 @@ New libraries are required to meet a basic popularity level to be hosted on cdnj
 For NPM packages, the base level for popularity is 800 downloads or more per month.
 For GitHub repositories the requirement is normally 200 stars.
 These requirements are at the discretion of cdnjs maintainers when adding libraries to cdnjs.
+
+## Creating a new library on cdnjs
+
+Changes to cdnjs happen with the following process:
+
+* Fork the cdnjs/packages repository on your GitHub account
+* Make the required changes to the forked repository
+* Raise a pull request with appropriate information
+* Remove your forked repository (or branch if you plan to contribute again) after merge
+
+If these steps are followed, and everything works out, the process for adding a library is usually efficient and your library will go live soon afterwards.
+
+### Fork the cdnjs repository
+
+To fork the repository via your browser, visit this link:
+
+[https://github.com/cdnjs/packages/fork](https://github.com/cdnjs/packages/fork)
+
+Select your GitHub account for the destination and wait for the forking process to complete.
+Assuming you saw no errors, you should be able to access your fork of cdnjs from your own GitHub account:
+
+https://github.com/your-github-username/packages
+
+Please make sure to fork cdnjs/packages, NOT cdnjs/cdnjs, as we only accept pull requests adding library JSON files to the cdnjs/packages repository.
+cdnjs/cdnjs is now a robot-only repository and does not accept PRs.
+
+### Make changes to your fork
+
+Change are made to your fork of cdnjs. These changes contribute to a pull request, which may be merged after review by the cdnjs maintainers.
+
+Changes to your fork can be made in GitHub using your browser, or on your computer using a `git` command line or graphical user interface.
+
+* If you intend to make a _single, simple contribution_ to cdnjs you will likely find the browser experience more straightforward.
+
+* If you intend to make _numerous contributions_ to cdnjs, you may find a local clone of your forked repository a better route.
+
+### Follow the existing library conventions
+
+When adding a new library, please refer to existing libraries in the repository, preferring more recently added ones as a source of truth for the preferred structure for a library JSON file.
+
+### Making changes using your browser
+
+The GitHub website provides an easy-to-use interface to add libraries.
+
+In your fork of cdnjs, navigate to the `packages` directory of the repository:
+
+https://github.com/your-github-username/packages/tree/master/packages
+
+From here, you can then click the 'Create new file' button in the bar above the file list.
+
+You can then define the name for the library JSON file, as well as the directory. If you type in `a/a-library.json` as the name, GitHub will automatically create or move you to the `a` directory and then create the file named `a-library.json`.
+
+In the file contents you should include your basic library JSON data, based on the conventions set by existing libraries and following the above guidance on a valid auto-update configuration.
+
+### Create a pull request
+
+Once you have added your content to your file, you need to commit this and then create a PR.
+
+If you're using the GitHub browser interface, below the file content will be a set of inputs for controlling the commit.
+
+For the commit message, it should follow the standard following format so we can easily tracking libraries being added:
+
+`Add my-library-name w/ npm/git auto-update`, where `my-library-name` is replaced with the name of the library (should match the JSON file name), and `npm/git` is replaced with the choice matching the auto-update config in the JSON file.
+
+A commit description is not required, though if an issue requesting this library to be added exists, it may be useful to add `Resolves <issue link>` to the description so that GitHub tracks the PR in the issue.
+
+Please do NOT commit to the `master` branch, instead choose to create a new branch and again give it a sensible name, such as `add-my-library-name`.
+
+Finally, press the 'Propose new file' button to commit the new file and begin the process of creating a PR.
+
+On the PR creation page, please fill out the provided template with the requested information about the library and then press the button to create the pull request.
+cdnjs maintainers will then review your pull request as soon as they can.
+
+### Fixing any CI errors
+
+To help with ensuring all library JSON files added to cdnjs are of a standard format and contain a valid auto-update configuration as well as other information about the library, we have an automated CI that will review your JSON file in the PR.
+
+If the CI finds any issues with your JSON file it will mark itself as failed and add an annotation to the JSON file in the pull request 'Files' tab with information about the issues it found.
+
+Please edit your JSON file either in the GitHub browser interface or via your local clone to resolve issues highlighted.
+If you are unsure, please ask a cdnjs maintainer for help and we'll happily work with you to get your PR ready to merge.
+
+### Reviewing and merging
+
+As soon as your PR is passing the CI, and when a maintainer has time, they will manually review your pull request to ensure no issues have slipped past the automated CI.
+
+Once the maintainer is happy that your PR is ready to go, they will merge it.
+You can then delete your fork (or branch if you plan to contribute again).
+
+Thank you for contributing to cdnjs!
+
+The cdnjs auto-updating logic runs roughly once per hour.
+It will detect any newly added JSON files and populate the 10 most recent versions it can find into the cdnjs/cdnjs repository.
+
+Once this is done, the files should shortly after be available on the CDN, though it may take a while longer for them to appear on our website as this doesn't automatically update as often.
+
 
 ## Configuring library auto-update
 
@@ -210,98 +309,3 @@ A library JSON file with all optimization disabled would contain the following:
 ```
 
 Setting the `js` property to false will disable the automatic generation of minified versions of JavaScript files by cdnjs for the library. Setting the `css` property to false will do the same, but for CSS files. Setting the `png` property to false will disable any compression that cdnjs would apply to the images, ensuring we serve the exact versions included in the source library. Setting the `jpg` property to false will do the same, but for JPG/JPEG files.
-
-## Creating a new library on cdnjs
-
-Changes to cdnjs happen with the following process:
-
-* Fork the cdnjs/packages repository on your GitHub account
-* Make the required changes to the forked repository
-* Raise a pull request with appropriate information
-* Remove your forked repository (or branch if you plan to contribute again) after merge
-
-If these steps are followed, and everything works out, the process for adding a library is usually efficient and your library will go live soon afterwards.
-
-### Fork the cdnjs repository
-
-To fork the repository via your browser, visit this link:
-
-[https://github.com/cdnjs/packages/fork](https://github.com/cdnjs/packages/fork)
-
-Select your GitHub account for the destination and wait for the forking process to complete.
-Assuming you saw no errors, you should be able to access your fork of cdnjs from your own GitHub account:
-
-https://github.com/your-github-username/packages
-
-Please make sure to fork cdnjs/packages, NOT cdnjs/cdnjs, as we only accept pull requests adding library JSON files to the cdnjs/packages repository.
-cdnjs/cdnjs is now a robot-only repository and does not accept PRs.
-
-### Make changes to your fork
-
-Change are made to your fork of cdnjs. These changes contribute to a pull request, which may be merged after review by the cdnjs maintainers.
-
-Changes to your fork can be made in GitHub using your browser, or on your computer using a `git` command line or graphical user interface.
-
-* If you intend to make a _single, simple contribution_ to cdnjs you will likely find the browser experience more straightforward.
-
-* If you intend to make _numerous contributions_ to cdnjs, you may find a local clone of your forked repository a better route.
-
-### Follow the existing library conventions
-
-When adding a new library, please refer to existing libraries in the repository, preferring more recently added ones as a source of truth for the preferred structure for a library JSON file.
-
-### Making changes using your browser
-
-The GitHub website provides an easy-to-use interface to add libraries.
-
-In your fork of cdnjs, navigate to the `packages` directory of the repository:
-
-https://github.com/your-github-username/packages/tree/master/packages
-
-From here, you can then click the 'Create new file' button in the bar above the file list.
-
-You can then define the name for the library JSON file, as well as the directory. If you type in `a/a-library.json` as the name, GitHub will automatically create or move you to the `a` directory and then create the file named `a-library.json`.
-
-In the file contents you should include your basic library JSON data, based on the conventions set by existing libraries and following the above guidance on a valid auto-update configuration.
-
-### Create a pull request
-
-Once you have added your content to your file, you need to commit this and then create a PR.
-
-If you're using the GitHub browser interface, below the file content will be a set of inputs for controlling the commit.
-
-For the commit message, it should follow the standard following format so we can easily tracking libraries being added:
-
-`Add my-library-name w/ npm/git auto-update`, where `my-library-name` is replaced with the name of the library (should match the JSON file name), and `npm/git` is replaced with the choice matching the auto-update config in the JSON file.
-
-A commit description is not required, though if an issue requesting this library to be added exists, it may be useful to add `Resolves <issue link>` to the description so that GitHub tracks the PR in the issue.
-
-Please do NOT commit to the `master` branch, instead choose to create a new branch and again give it a sensible name, such as `add-my-library-name`.
-
-Finally, press the 'Propose new file' button to commit the new file and begin the process of creating a PR.
-
-On the PR creation page, please fill out the provided template with the requested information about the library and then press the button to create the pull request.
-cdnjs maintainers will then review your pull request as soon as they can.
-
-### Fixing any CI errors
-
-To help with ensuring all library JSON files added to cdnjs are of a standard format and contain a valid auto-update configuration as well as other information about the library, we have an automated CI that will review your JSON file in the PR.
-
-If the CI finds any issues with your JSON file it will mark itself as failed and add an annotation to the JSON file in the pull request 'Files' tab with information about the issues it found.
-
-Please edit your JSON file either in the GitHub browser interface or via your local clone to resolve issues highlighted.
-If you are unsure, please ask a cdnjs maintainer for help and we'll happily work with you to get your PR ready to merge.
-
-### Reviewing and merging
-
-As soon as your PR is passing the CI, and when a maintainer has time, they will manually review your pull request to ensure no issues have slipped past the automated CI.
-
-Once the maintainer is happy that your PR is ready to go, they will merge it.
-You can then delete your fork (or branch if you plan to contribute again).
-
-Thank you for contributing to cdnjs!
-
-The cdnjs auto-updating logic runs roughly once per hour.
-It will detect any newly added JSON files and populate the 10 most recent versions it can find into the cdnjs/cdnjs repository.
-
-Once this is done, the files should shortly after be available on the CDN, though it may take a while longer for them to appear on our website as this doesn't automatically update as often.
